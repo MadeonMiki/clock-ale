@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta Regresiva a la Medianoche</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-center font-sans">
+
+    <div class="text-center p-8 bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full mx-4">
+        <h1 id="title" class="text-2xl font-bold mb-6 text-indigo-400 tracking-wide uppercase">
+            Tiempo restante para la medianoche
+        </h1>
+
+        <div id="countdown" class="flex justify-center gap-4 text-center">
+            <div class="flex flex-col bg-slate-950 p-4 rounded-lg min-w-[70px]">
+                <span id="hours" class="text-4xl font-black text-white">00</span>
+                <span class="text-xs text-slate-400 uppercase mt-1">Horas</span>
+            </div>
+            <div class="flex flex-col bg-slate-950 p-4 rounded-lg min-w-[70px]">
+                <span id="minutes" class="text-4xl font-black text-white">00</span>
+                <span class="text-xs text-slate-400 uppercase mt-1">Min</span>
+            </div>
+            <div class="flex flex-col bg-slate-950 p-4 rounded-lg min-w-[70px]">
+                <span id="seconds" class="text-4xl font-black text-amber-400">00</span>
+                <span class="text-xs text-slate-400 uppercase mt-1">Seg</span>
+            </div>
+        </div>
+
+        <div id="message" class="hidden text-3xl font-extrabold text-emerald-400 animate-bounce py-6">
+            ¡Feliz Medianoche! 🌌✨
+        </div>
+    </div>
+
+    <!-- Vinculación del script externo -->
+    <script src="app.js"></script>
+</body>
+</html>
