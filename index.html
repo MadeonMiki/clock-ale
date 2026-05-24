@@ -3,15 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
     <title>Cuenta Regresiva a la Medianoche</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-center font-sans">
+    <audio id="bg-music" loop>
+        <source src="music1.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <style>
+        /* Estilos para el fondo de nieve */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+            color: white;
+            /* Cambiamos la fuente a Montserrat y peso base Bold */
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    <div class="text-center p-8 bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full mx-4">
-        <h1 id="title" class="text-2xl font-bold mb-6 text-indigo-400 tracking-wide uppercase">
-            Tiempo restante para la medianoche
+        /* Contenedor principal para el efecto de nieve */
+        #snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Permite clics a través de la nieve */
+            z-index: 0; /* Coloca la nieve detrás del contenido */
+        }
+
+        /* Estilos para el copo de nieve individual */
+        .snowflake {
+            position: absolute;
+            background-color: red; /* Color de la nieve */
+            border-radius: 50%; /* Hace los copos redondos */
+            opacity: 0.6; /* Ligeramente transparente */
+            /* Animación de caída */
+            animation: fall linear infinite; 
+        }
+        h1{
+            font-family: 'Montserrat', sans-serif;
+
+        }
+
+        /* Definición de la animación de caída */
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px); /* Empieza arriba de la pantalla */
+            }
+            100% {
+                transform: translateY(100vh); /* Termina abajo de la pantalla */
+            }
+        }
+    </style>
+</head>
+<body class="  min-h-screen flex flex-col items-center justify-center font-sans overflow-hidden relative">
+    <div id="snow-container"></div>
+    <div id="glow-bg" class="pointer-events-none fixed top-0 left-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 ease-out opacity-0 md:opacity-100"></div>
+    <div class="text-center p-8 max-w-md w-full mx-4">
+        <button title="Reproducir/Mutar música" id="music-btn" class="fixed top-4 right-4 bg-slate-800 hover:bg-slate-700 text-slate-300 p-3 rounded-full shadow-lg border border-slate-700 transition-all duration-300 z-50 flex items-center justify-center">
+            <!-- Icono de Play por defecto (SVG de Tailwind/Heroicons) -->
+            <svg id="music-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+            </svg>
+        </button>
+        <h1 id="title" class=" text-amber-500 drop-shadow-[0_2px_8px_rgba(245,158,11,0.3)] text-2xl mb-6 tracking-wide ">
+            Villana your expedition awaits:
         </h1>
 
         <div id="countdown" class="flex justify-center gap-4 text-center">
@@ -28,13 +94,63 @@
                 <span class="text-xs text-slate-400 uppercase mt-1">Seg</span>
             </div>
         </div>
-
+        <!-- POPUP DE BIENVENIDA -->
+<div id="welcome-popup" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-[100] transition-opacity duration-500">
+    <div class="text-center p-8 bg-transparent border border-slate-800 rounded-2xl shadow-2xl max-w-sm mx-4 transform scale-100 transition-transform duration-500">
+        <!-- Icono decorativo -->
+        <div class="text-5xl mb-4 animate-pulse">🌌</div>
+        
+        <h2 class="text-2xl font-black text-white mb-2 tracking-wide">
+            Miki Productions
+        </h2>
+        
+        <p class="text-sm text-slate-400 mb-6">
+            Espero disfrutes
+        </p>
+        
+        <!-- Botón que activa todo -->
+        <button id="enter-btn" class="w-full bg-amber-500 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+            Acepto que voy a cumplir 32
+        </button>
+    </div>
+</div>
         <div id="message" class="hidden text-3xl font-extrabold text-emerald-400 animate-bounce py-6">
-            ¡Feliz Medianoche! 🌌✨
+            ¡Feliz Cumpleaños! 🌌✨
         </div>
     </div>
 
     <!-- Vinculación del script externo -->
     <script src="app.js"></script>
+    <script >// --- LÓGICA DEL EFECTO DE NIEVE ROJA ---
+        const snowContainer = document.getElementById('snow-container');
+        const numberOfSnowflakes = 100; // Cantidad de copos
+
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+
+            // Posición horizontal aleatoria
+            const startX = Math.random() * window.innerWidth;
+            snowflake.style.left = `${startX}px`;
+
+            // Tamaño aleatorio para dar profundidad
+            const size = Math.random() * 8 + 2; // Entre 2px y 10px
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+
+            // Duración aleatoria de la animación de caída
+            const fallDuration = Math.random() * 5 + 3; // Entre 3s y 8s
+            snowflake.style.animationDuration = `${fallDuration}s`;
+
+            snowContainer.appendChild(snowflake);
+
+            // Eliminar el copo después de que termina la animación para liberar memoria
+            setTimeout(() => {
+                snowflake.remove();
+            }, fallDuration * 1000);
+        }
+
+        // Crear copos periódicamente
+        setInterval(createSnowflake, 100); // Crea un copo cada 100ms</script>
 </body>
 </html>
